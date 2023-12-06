@@ -3,27 +3,33 @@
  *
  * Bootstraps Vuetify and other plugins then mounts the App`
  */
+import './styles/style.css'
 
-// Plugins
 import { registerPlugins } from '@/plugins'
-
-// Components
-import SButton from '@/components/Button/SButton.vue'
-import AppVue from './App.vue'
-
-// Composables
 import { App, createApp } from 'vue'
 
-export default {
-    install: (app: App) => {
-        app.component('SButton', SButton)
+const app = createApp(AppEntry)
+// Plugins
+registerPlugins(app)
+
+
+// Components
+import AppEntry from './App.vue'
+import * as components from './components'
+
+// Composables
+
+const DSLibrary = {
+    install(app: App) {
+        for (const componentKey in components) {
+            app.use((components as any)[componentKey])
+        }
     }
 }
 
-const app = createApp(AppVue)
+export default DSLibrary
 
-registerPlugins(app)
-
-import './styles/main.css'
+// export all components as vue plugin
+export * from './components'
 
 app.mount('#app')

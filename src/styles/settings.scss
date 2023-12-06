@@ -5,7 +5,6 @@
  */
 
 // https://vuetifyjs.com/features/sass-variables/`
-@use 'vuetify/settings' with (
-  $button-border-radius: 4px,
-  $button-text-transform: none
+@forward 'vuetify/settings' with (
+  $utilities: false,
 );

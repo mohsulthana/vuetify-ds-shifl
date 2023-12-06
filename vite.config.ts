@@ -1,13 +1,13 @@
 // Plugins
-import vue from '@vitejs/plugin-vue'
-import ViteFonts from 'unplugin-fonts/vite'
-import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-
+import vue from '@vitejs/plugin-vue';
+import path from "path";
+import ViteFonts from 'unplugin-fonts/vite';
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 
 // Utilities
-import { fileURLToPath, URL } from 'node:url'
-import * as path from "path"
-import { defineConfig } from 'vite'
+import { fileURLToPath, URL } from 'node:url';
+import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,6 +15,7 @@ export default defineConfig({
     vue({
       template: { transformAssetUrls },
     }),
+    cssInjectedByJsPlugin(),
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     vuetify({
       autoImport: true,
@@ -43,26 +44,23 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+
   build: {
-    emptyOutDir: false,
+    cssCodeSplit: true,
+    target: "esnext",
     lib: {
-      // src/main.ts is where we have exported the component(s)
-      entry: path.resolve(__dirname, "src/main.ts"),
-      formats: ['es'],
-      name: "ShiflDSDraft",
-      fileName: "shifl-ds-draft",
+      entry: path.resolve(__dirname, "src/index.ts"),
+      name: "ShiflVuetifyDS",
+      fileName: (format) => `vuetify-ds-shifl.${format}.js`,
     },
+
     rollupOptions: {
-      // make sure to externalize deps that shouldn't be bundled
-      // into your library
       external: ["vue"],
       output: {
-        // Provide global variables to use in the UMD build
-        // for externalized deps
         globals: {
           vue: "Vue",
         },
       },
-    },
-  },
+    }
+  }
 })

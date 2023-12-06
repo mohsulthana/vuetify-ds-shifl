@@ -1,3 +1,5 @@
-import SButton from "@/components/Button/SButton.vue";
+import Button from './Button'
 
-export default { SButton }
+export {
+    Button
+}
